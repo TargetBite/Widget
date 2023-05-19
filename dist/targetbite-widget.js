@@ -215,6 +215,10 @@ function loadTargetBiteWidget() {
                     align-items: center;
                     padding-bottom: 2px;
                 }
+                .targetbite-widget-container .left {
+                    align-items: center;
+                    display: flex;
+                }
                 .targetbite-widget-container .left .card {
                     margin-right: 10px;
                 }
