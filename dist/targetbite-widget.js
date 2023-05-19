@@ -1,4 +1,36 @@
+let optedIn = false;
+
 function appendTargetBiteWidget() {
+    const modal = document.getElementById('targetbite-widget-container-modal');
+    function hideTargetBiteWidget() {
+        document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+    }
+    function openModal() {
+        document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+        document.getElementById('targetbite-widget-container-modal-container').style.display = 'flex';
+    }
+    function onClickModalContainer(event) {
+        if (event.target.id == 'targetbite-widget-container-modal-container') {
+            if (optedIn) {
+                document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+                document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+            } else {
+                document.getElementById('targetbite-widget-container-cta').style.display = 'flex';
+                document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+            }
+        }
+    }
+    function optInClicked() {
+        optedIn = true;
+        document.getElementById('targetbite-checkmark').style.display = 'block';
+        document.getElementById('opt-in-btn').style.display = 'none';
+        document.getElementById('dont-show-btn').style.display = 'none';
+    }
+    function dontShowMeClicked() {
+        document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+        document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+    }
+
     const widgetDiv = document.createElement("div");
     widgetDiv.innerHTML = `
     <div class=targetbite-widget-container><div class=cta id=targetbite-widget-container-cta><div class=left onclick=openModal()><span class=card><?xml version="1.0" encoding="iso-8859-1"?><svg id=Capa_1 viewBox="0 0 512 512"xmlns=http://www.w3.org/2000/svg height=40px version=1.1 width=40px xml:space=preserve xmlns:xlink=http://www.w3.org/1999/xlink><path d="M512,402.282c0,16.716-13.55,30.267-30.265,30.267H30.265C13.55,432.549,0,418.997,0,402.282V109.717
