@@ -1,5 +1,5 @@
 
-const targetBiteAppKey = document.currentScript.getAttribute('appKey');
+const targetBiteclientId = document.currentScript.getAttribute('clientId');
 const targetBiteOptInCallback = document.currentScript.getAttribute('onOptIn');
 let targetbiteClient = null;
 const baseUrl = 'https://us-central1-targetbite.cloudfunctions.net';
@@ -12,6 +12,9 @@ class TargetBiteClient {
     }
 
     get(field) {
+        if (field === 'email') {
+            return this.email;
+        }
         return this.data[field];
     }
 
@@ -25,14 +28,14 @@ class TargetBiteClient {
             delete data.email;
             this.data = data;
 
-            this.config = await (await fetch(`${baseUrl}/application?app_key=${targetBiteAppKey}&email=${this.email}`, {
+            this.config = await (await fetch(`${baseUrl}/application?app_key=${targetBiteclientId}&email=${this.email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })).json();
 
-            if (!this.config.opted_in) {
+            if (Object.keys(this.config).includes('opted_in') && !this.config.opted_in) {
                 loadTargetBiteWidget();
             }
         } else {
@@ -42,7 +45,7 @@ class TargetBiteClient {
     }
 
     async optIn() {
-        await (await fetch(`${baseUrl}/optIn?app_key=${targetBiteAppKey}&email=${this.email}`, {
+        await (await fetch(`${baseUrl}/optIn?app_key=${targetBiteclientId}&email=${this.email}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -56,8 +59,6 @@ class TargetBiteClient {
 }
 
 function loadTargetBiteWidget() {
-    let optedIn = false;
-
     function appendTargetBiteWidget() {
         const widgetDiv = document.createElement("div");
         widgetDiv.innerHTML = `
@@ -352,6 +353,7 @@ function loadTargetBiteWidget() {
 
         const script = document.createElement('script');
         script.innerHTML = `
+            let optedIn = false;
             const modal = document.getElementById('targetbite-widget-container-modal');
             function hideTargetBiteWidget() {
                 document.getElementById('targetbite-widget-container-cta').style.display = 'none';
