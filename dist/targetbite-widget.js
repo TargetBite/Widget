@@ -261,6 +261,10 @@ function loadTargetBiteWidget() {
                     padding-bottom: 80px;
                     cursor: default;
                 }
+                .targetbite-widget-container .modal-container .modal .card {
+                    display: flex;
+                    justify-content: center;
+                }
                 .targetbite-widget-container .modal-container .modal .title {
                     font-size: 18px;
                     display: flex;
