@@ -1,41 +1,11 @@
 let optedIn = false;
 
 function appendTargetBiteWidget() {
-    const modal = document.getElementById('targetbite-widget-container-modal');
-    function hideTargetBiteWidget() {
-        document.getElementById('targetbite-widget-container-cta').style.display = 'none';
-    }
-    function openModal() {
-        document.getElementById('targetbite-widget-container-cta').style.display = 'none';
-        document.getElementById('targetbite-widget-container-modal-container').style.display = 'flex';
-    }
-    function onClickModalContainer(event) {
-        if (event.target.id == 'targetbite-widget-container-modal-container') {
-            if (optedIn) {
-                document.getElementById('targetbite-widget-container-cta').style.display = 'none';
-                document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
-            } else {
-                document.getElementById('targetbite-widget-container-cta').style.display = 'flex';
-                document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
-            }
-        }
-    }
-    function optInClicked() {
-        optedIn = true;
-        document.getElementById('targetbite-checkmark').style.display = 'block';
-        document.getElementById('opt-in-btn').style.display = 'none';
-        document.getElementById('dont-show-btn').style.display = 'none';
-    }
-    function dontShowMeClicked() {
-        document.getElementById('targetbite-widget-container-cta').style.display = 'none';
-        document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
-    }
-
     const widgetDiv = document.createElement("div");
     widgetDiv.innerHTML = `
         <div class="targetbite-widget-container">
             <div class="cta" id="targetbite-widget-container-cta">
-                <div class="left" onclick="openModal()">
+                <div class="left" onclick="targetbite_openModal()">
                     <span class="card">
                         <?xml version="1.0" encoding="iso-8859-1"?>
                         <svg height="40px" width="40px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
@@ -78,7 +48,7 @@ function appendTargetBiteWidget() {
                         </svg>
                     </span>
                 </div>
-                <div class="middle" onclick="openModal()">
+                <div class="middle" onclick="targetbite_openModal()">
                     <div class="title">
                         $100 Amazon Gift Card on us!
                     </div>
@@ -97,7 +67,7 @@ function appendTargetBiteWidget() {
                     </span>
                 </div>
             </div>
-            <div class="modal-container" id="targetbite-widget-container-modal-container" onclick="onClickModalContainer(event)">
+            <div class="modal-container" id="targetbite-widget-container-modal-container" onclick="targetbite_onClickModalContainer(event)">
                 <div class="modal" id="targetbite-widget-container-modal">
                     <div class="title">
                         Help us make Wealthsimple better!
@@ -153,10 +123,10 @@ function appendTargetBiteWidget() {
                         You will recieve a <b>$100 Amazon Gift Card</b> for every customer interview.
                     </div>
                     <svg id="targetbite-checkmark" class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
-                    <div class="opt-in-btn" id="opt-in-btn" onclick="optInClicked()">
+                    <div class="opt-in-btn" id="opt-in-btn" onclick="targetbite_optInClicked()">
                         Sounds good, count me in!
                     </div>
-                    <div class="dont-show-btn" id="dont-show-btn" onclick="dontShowMeClicked()">
+                    <div class="dont-show-btn" id="dont-show-btn" onclick="targetbite_dontShowMeClicked()">
                         <u>Don't show me this for a while</u>
                     </div>
                 </div>
@@ -321,6 +291,40 @@ function appendTargetBiteWidget() {
         </style>
     `
     document.body.appendChild(widgetDiv);
+
+    const script = document.createElement('script');
+    script.innerHTML = `
+        const modal = document.getElementById('targetbite-widget-container-modal');
+        function hideTargetBiteWidget() {
+            document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+        }
+        function targetbite_openModal() {
+            document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+            document.getElementById('targetbite-widget-container-modal-container').style.display = 'flex';
+        }
+        function targetbite_onClickModalContainer(event) {
+            if (event.target.id == 'targetbite-widget-container-modal-container') {
+                if (optedIn) {
+                    document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+                    document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+                } else {
+                    document.getElementById('targetbite-widget-container-cta').style.display = 'flex';
+                    document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+                }
+            }
+        }
+        function targetbite_optInClicked() {
+            optedIn = true;
+            document.getElementById('targetbite-checkmark').style.display = 'block';
+            document.getElementById('opt-in-btn').style.display = 'none';
+            document.getElementById('dont-show-btn').style.display = 'none';
+        }
+        function targetbite_dontShowMeClicked() {
+            document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+            document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+        }
+    `
+    document.body.appendChild(script);
 }
 
 window.addEventListener('load', function () {
