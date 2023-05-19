@@ -3,6 +3,7 @@
         <title>Demo Website</title>
         <script src="https://cdn.jsdelivr.net/gh/TargetBite/Widget/dist/targetbite-widget.v1.min.js"></script>
         <script>
+            let optedIn = false;
             const modal = document.getElementById('targetbite-widget-container-modal');
             function hideTargetBiteWidget() {
                 document.getElementById('targetbite-widget-container-cta').style.display = 'none';
@@ -13,9 +14,24 @@
             }
             function onClickModalContainer(event) {
                 if (event.target.id == 'targetbite-widget-container-modal-container') {
-                    document.getElementById('targetbite-widget-container-cta').style.display = 'flex';
-                    document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+                    if (optedIn) {
+                        document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+                        document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+                    } else {
+                        document.getElementById('targetbite-widget-container-cta').style.display = 'flex';
+                        document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+                    }
                 }
+            }
+            function optInClicked() {
+                optedIn = true;
+                document.getElementById('targetbite-checkmark').style.display = 'block';
+                document.getElementById('opt-in-btn').style.display = 'none';
+                document.getElementById('dont-show-btn').style.display = 'none';
+            }
+            function dontShowMeClicked() {
+                document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+                document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
             }
         </script>
     </head>
@@ -143,10 +159,11 @@
                         <br/><br/>
                         You will recieve a <b>$100 Amazon Gift Card</b> for every customer interview.
                     </div>
-                    <div class="opt-in-btn">
+                    <svg id="targetbite-checkmark" class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"><circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg>
+                    <div class="opt-in-btn" id="opt-in-btn" onclick="optInClicked()">
                         Sounds good, count me in!
                     </div>
-                    <div class="dont-show-btn">
+                    <div class="dont-show-btn" id="dont-show-btn" onclick="dontShowMeClicked()">
                         <u>Don't show me this for a while</u>
                     </div>
                 </div>
@@ -244,10 +261,11 @@
                 font-size: 18px;
                 cursor: pointer;
                 margin-top: 20px;
+                color: #34495E;
             }
             .targetbite-widget-container .modal-container .modal .opt-in-btn:hover {
-                background: #34495E;
-                color: white;
+                color: #202d3a;
+                border-color: #202d3a;
             }
             .targetbite-widget-container .modal-container .modal .dont-show-btn {
                 padding: 6px;
@@ -258,7 +276,55 @@
             } 
             .targetbite-widget-container .modal-container .modal .dont-show-btn:hover {
                 color: #34495E;
-            }   
+            }
+            .targetbite-widget-container .checkmark__circle {
+                stroke-dasharray: 166;
+                stroke-dashoffset: 166;
+                stroke-width: 2;
+                stroke-miterlimit: 10;
+                stroke: green;
+                fill: none;
+                animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+            }
+
+            .targetbite-widget-container .checkmark {
+                display: none;
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                stroke-width: 2;
+                stroke: green;
+                margin-top: 44px;
+                stroke-miterlimit: 10;
+                box-shadow: inset 0px 0px 0px #7ac142;
+                animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+            }
+
+            .targetbite-widget-container .checkmark__check {
+                transform-origin: 50% 50%;
+                stroke-dasharray: 48;
+                stroke-dashoffset: 48;
+                animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+            }
+
+            @keyframes stroke {
+                100% {
+                    stroke-dashoffset: 0;
+                }
+                }
+                @keyframes scale {
+                0%, 100% {
+                    transform: none;
+                }
+                50% {
+                    transform: scale3d(1.1, 1.1, 1);
+                }
+                }
+                @keyframes fill {
+                100% {
+                    box-shadow: inset 0px 0px 0px 30px #fff;
+                }
+            }
         </style>
     </body>
     <style>
