@@ -120,7 +120,7 @@ function loadTargetBiteWidget() {
                 <div class="modal-container" id="targetbite-widget-container-modal-container" onclick="targetbite_onClickModalContainer(event)">
                     <div class="modal" id="targetbite-widget-container-modal">
                         <div class="title">
-                            Help us make ${targetbiteClient.getConfig('client_name')} better!
+                            Help us make ${targetbiteClient.getConfig('client_name')} better
                         </div>
                         <div class="sub-title">
                             Opt-in for Customer Interviews
