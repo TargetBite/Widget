@@ -17,7 +17,7 @@ class TargetBiteClient {
         return this.config[field];
     }
 
-    async setData(data) {
+    async userData(data) {
         this.data = data;
         if (data.email) {
             this.config = await (await fetch(`https://us-central1-targetbite.cloudfunctions.net/application?app_key=${targetBiteAppKey}&email=${data.email}`, {
@@ -37,12 +37,15 @@ class TargetBiteClient {
     }
 
     async optIn() {
-        console.log(this.data);
-        const optedIn = await (await fetch(`https://us-central1-targetbite.cloudfunctions.net/application?app_key=${targetBiteAppKey}&email=${data.email}`, {
+        await (await fetch(`https://us-central1-targetbite.cloudfunctions.net/optIn?app_key=${targetBiteAppKey}&email=${data.email}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({
+                active: true,
+                userData: this.data
+            })
         })).json();
     }
 }
@@ -369,6 +372,11 @@ function loadTargetBiteWidget() {
                 document.getElementById('opt-in-btn').style.display = 'none';
                 document.getElementById('dont-show-btn').style.display = 'none';
                 targetbiteClient.optIn();
+
+                setTimeout(() => {
+                    document.getElementById('targetbite-widget-container-cta').style.display = 'none';
+                    document.getElementById('targetbite-widget-container-modal-container').style.display = 'none';
+                }, 2000);
             }
             function targetbite_dontShowMeClicked() {
                 document.getElementById('targetbite-widget-container-cta').style.display = 'none';
