@@ -23,6 +23,7 @@ class TargetBiteClient {
 
     optIn() {
         console.log(this.data);
+        
     }
 }
 
