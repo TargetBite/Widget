@@ -11,9 +11,15 @@ class TargetBiteClient {
         return this.data[field];
     }
 
-    setData(data) {
+    async setData(data) {
         this.data = data;
         if (data.email) {
+            this.config = await fetch(`https://us-central1-targetbite.cloudfunctions.net/application?app_key=${targetBiteAppKey}&email=${data.email}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             loadTargetBite(this);
         } else {
             throw new Error("TargetBite setData: email is required");
@@ -29,6 +35,8 @@ class TargetBiteClient {
 
 function loadTargetBite(targetbiteClient) {
     let optedIn = false;
+
+    console.log(this.config);
 
     function appendTargetBiteWidget() {
         const widgetDiv = document.createElement("div");
