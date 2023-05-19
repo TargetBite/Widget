@@ -1,12 +1,17 @@
 <html>
     <head>
         <title>Demo Website</title>
-        <script src="../dist/targetbite-widget.js" ></script>
     </head>
     <body>
         <div class="main">
             <h1>Your Web App Here!</h1>
         </div>
+        <script src="../dist/targetbite-widget.js" appKey="f36f35b2-eb36-4cb3-ba13-08941da03b7b"></script>
+        <script>
+            new TargetBiteClient().setData({
+                email: "jake@example.com"
+            })
+        </script>
     </body>
     <style>
         body {
