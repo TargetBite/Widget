@@ -2,9 +2,11 @@
 const targetBiteAppKey = document.currentScript.getAttribute('appKey');
 const targetBiteOptInCallback = document.currentScript.getAttribute('onOptIn');
 let targetbiteClient = null;
+const baseUrl = 'https://us-central1-targetbite.cloudfunctions.net';
 
 class TargetBiteClient {
     constructor() {
+        this.email = null;
         this.data = null;
         targetbiteClient = this;
     }
@@ -18,9 +20,12 @@ class TargetBiteClient {
     }
 
     async userData(data) {
-        this.data = data;
         if (data.email) {
-            this.config = await (await fetch(`https://us-central1-targetbite.cloudfunctions.net/application?app_key=${targetBiteAppKey}&email=${data.email}`, {
+            this.email = data.email;
+            delete data.email;
+            this.data = data;
+
+            this.config = await (await fetch(`${baseUrl}/application?app_key=${targetBiteAppKey}&email=${this.email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -37,7 +42,7 @@ class TargetBiteClient {
     }
 
     async optIn() {
-        await (await fetch(`https://us-central1-targetbite.cloudfunctions.net/optIn?app_key=${targetBiteAppKey}&email=${data.email}`, {
+        await (await fetch(`${baseUrl}/optIn?app_key=${targetBiteAppKey}&email=${this.email}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
