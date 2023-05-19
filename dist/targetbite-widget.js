@@ -1,42 +1,54 @@
 
 const targetBiteAppKey = document.currentScript.getAttribute('appKey');
 const targetBiteOptInCallback = document.currentScript.getAttribute('onOptIn');
+let targetbiteClient = null;
 
 class TargetBiteClient {
     constructor() {
         this.data = null;
+        targetbiteClient = this;
     }
 
     get(field) {
         return this.data[field];
     }
 
+    getConfig(field) {
+        return this.config[field];
+    }
+
     async setData(data) {
         this.data = data;
         if (data.email) {
-            this.config = await fetch(`https://us-central1-targetbite.cloudfunctions.net/application?app_key=${targetBiteAppKey}&email=${data.email}`, {
+            this.config = await (await fetch(`https://us-central1-targetbite.cloudfunctions.net/application?app_key=${targetBiteAppKey}&email=${data.email}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            });
-            loadTargetBite(this);
+            })).json();
+
+            if (!this.config.opted_in) {
+                loadTargetBiteWidget();
+            }
         } else {
             throw new Error("TargetBite setData: email is required");
         }
         return this;
     }
 
-    optIn() {
+    async optIn() {
         console.log(this.data);
-        
+        const optedIn = await (await fetch(`https://us-central1-targetbite.cloudfunctions.net/application?app_key=${targetBiteAppKey}&email=${data.email}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })).json();
     }
 }
 
-function loadTargetBite(targetbiteClient) {
+function loadTargetBiteWidget() {
     let optedIn = false;
-
-    console.log(this.config);
 
     function appendTargetBiteWidget() {
         const widgetDiv = document.createElement("div");
@@ -91,7 +103,7 @@ function loadTargetBite(targetbiteClient) {
                             $100 Amazon Gift Card on us!
                         </div>
                         <div class="sub-title">
-                            Help us make Wealthsimple better
+                            Help us make ${targetbiteClient.getConfig('client_name')} better
                         </div>
                     </div>
                     <div class="right">
@@ -108,7 +120,7 @@ function loadTargetBite(targetbiteClient) {
                 <div class="modal-container" id="targetbite-widget-container-modal-container" onclick="targetbite_onClickModalContainer(event)">
                     <div class="modal" id="targetbite-widget-container-modal">
                         <div class="title">
-                            Help us make Wealthsimple better!
+                            Help us make ${targetbiteClient.getConfig('client_name')} better!
                         </div>
                         <div class="sub-title">
                             Opt-in for Customer Interviews
